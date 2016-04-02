@@ -82,6 +82,4 @@ public class Buku implements Serializable {
     public void setTahunTerbit(String tahunTerbit) {
         this.tahunTerbit = tahunTerbit;
     }
-    
-    
 }
