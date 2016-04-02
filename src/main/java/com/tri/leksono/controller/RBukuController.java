@@ -48,22 +48,20 @@ public class RBukuController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity cariByPengarang(@PathVariable("pengarang") String pengarang){
         List buku = dao.findByPengarang(pengarang);
-        if(buku == null){
+        if(buku.isEmpty()){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }else{
-            return new ResponseEntity(buku,HttpStatus.OK);
         }
+        return new ResponseEntity(buku,HttpStatus.OK);
     }
     
     @RequestMapping(value = "/buku/title/{judul}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity cariByJudul(@PathVariable("judul") String judul){
         List buku = dao.findByNamaBuku(judul);
-        if(buku == null){
+        if(buku.isEmpty()){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }else{
-            return new ResponseEntity(buku,HttpStatus.OK);
         }
+        return new ResponseEntity(buku,HttpStatus.OK);
     }
     
     @RequestMapping(value = "/buku/{id}", method = RequestMethod.DELETE)

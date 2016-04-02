@@ -37,5 +37,12 @@ public class ResponseUtil {
 
     public void setObject(Object object) {
         this.object = object;
-    }    
+    }
+    
+    public static ResponseUtil tidakAda(){
+        ResponseUtil res = new ResponseUtil();
+        res.setErrorCode("90");
+        res.setErrorMessage("Data tidak ada");
+        return res;
+    }
 }

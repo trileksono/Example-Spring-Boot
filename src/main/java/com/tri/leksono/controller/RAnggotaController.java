@@ -50,22 +50,20 @@ public class RAnggotaController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity cariByName(@PathVariable("nama") String nama) {
         List lAnggota = dao.findByNama(nama);
-        if (lAnggota == null) {
+        if (lAnggota.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity(lAnggota, HttpStatus.OK);
         }
+        return new ResponseEntity(lAnggota, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/anggota/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity findById(@PathVariable("id") String id) {
-        List anggota = dao.findByidAnggota(id);
+        Anggota anggota = dao.findOne(id);
         if (anggota == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity(anggota, HttpStatus.OK);
+            return new ResponseEntity<>(ResponseUtil.tidakAda(), HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(anggota, HttpStatus.OK);
     }
 
     //Custom response
@@ -73,11 +71,9 @@ public class RAnggotaController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody ResponseUtil findByIdCus(@PathVariable("id") String id) {
         ResponseUtil resp = new ResponseUtil();
-        List anggota = dao.findByidAnggota(id);
+        Anggota anggota = dao.findOne(id);
         if (anggota == null) {
-            resp.setErrorCode("10");
-            resp.setErrorMessage("Data tidak ditemukan");
-            return resp;
+            return ResponseUtil.tidakAda();
         } else {
             resp.setErrorCode("00");
             resp.setErrorMessage("success");
