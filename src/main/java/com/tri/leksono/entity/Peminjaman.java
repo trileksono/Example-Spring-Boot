@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
  * @author tri 
  */
 @Entity
-@Table(name = "peminjaman") 
+@Table(name = "tbl_peminjaman") 
 @IdClass(PeminjamanId.class)  // Referensi class yg berisikan ID (PK) pada table ini
 public class Peminjaman implements Serializable{
     

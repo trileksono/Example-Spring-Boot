@@ -53,7 +53,7 @@ public class RAnggotaController {
         if (lAnggota == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity(nama, HttpStatus.OK);
+            return new ResponseEntity(lAnggota, HttpStatus.OK);
         }
     }
 
