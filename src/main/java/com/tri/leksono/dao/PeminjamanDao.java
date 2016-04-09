@@ -5,7 +5,8 @@
  */
 package com.tri.leksono.dao;
 
-import com.tri.leksono.entity.Buku;
+import com.tri.leksono.entity.Peminjaman;
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,9 +16,9 @@ import org.springframework.data.repository.query.Param;
  *
  * @author tri
  */
-public interface BukuDAO extends JpaRepository<Buku, String> {
-    public List<Buku> findByPengarang(String pengarang);
+public interface PeminjamanDao extends JpaRepository<Peminjaman, String>{
     
-    @Query("select b from Buku b where b.namaBuku like %:namabuku%")
-    public List<Buku> findByNamaBuku(@Param("namabuku") String namabuku);
+    @Query("select p from Peminjaman p where p.tglPinjam between :tglPinjam and :tglKembali")
+    public List<Peminjaman> findTglPinjam(@Param("tglPinjam") Date tglPinjam, 
+            @Param("tglKembali") Date tglKembali);
 }

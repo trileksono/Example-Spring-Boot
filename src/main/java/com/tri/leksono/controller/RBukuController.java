@@ -9,7 +9,9 @@ import com.tri.leksono.dao.BukuDAO;
 import com.tri.leksono.entity.Buku;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.validation.Valid;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class RBukuController {
+
+    final org.slf4j.Logger LOG = LoggerFactory.getLogger(RBukuController.class);    
     
     @Autowired
     private BukuDAO dao;

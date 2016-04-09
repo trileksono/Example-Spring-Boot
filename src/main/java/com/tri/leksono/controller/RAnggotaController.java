@@ -42,7 +42,7 @@ public class RAnggotaController {
 
     @RequestMapping(value = "/anggota", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public Page<Anggota> cariBuku(Pageable page) {
+    public Page<Anggota> cariAnggota(Pageable page) {
         return dao.findAll(page);
     }
 
@@ -85,7 +85,7 @@ public class RAnggotaController {
     
     @RequestMapping(value = "/anggota/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBuku(@PathVariable("id") String id) {
+    public void deleteAnggota(@PathVariable("id") String id) {
         dao.delete(id);
     }
 }

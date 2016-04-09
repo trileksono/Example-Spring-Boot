@@ -5,10 +5,13 @@
  */
 package com.tri.leksono.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +33,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity                             //Anotasi menandakan kelas ini entity
 @Table(name = "tbl_anggota")        //Nama table yg akan digenerate
 public class Anggota implements Serializable {
+
+    private static final Logger LOG = Logger.getLogger(Anggota.class.getName());
     
     @Id                             //Id table
     @GeneratedValue(generator = "uuid") //Di generate uniqe dengan uuid
@@ -55,11 +60,20 @@ public class Anggota implements Serializable {
     @Column(nullable = false, length = 10, name = "jenis_kelamin")
     private String jenisKelamin;
 
-    @OneToMany(mappedBy = "anggota")  // Kasih tau peminjaman, entity di mapped oleh anggota
+    @OneToMany(mappedBy = "anggota", cascade = CascadeType.ALL)  // Kasih tau peminjaman, entity di mapped oleh anggota
+    @JsonIgnore
     private List<Peminjaman> listPeminjaman = new ArrayList<>();
     
     public String getIdAnggota() {
         return idAnggota;
+    }
+
+    public List<Peminjaman> getListPeminjaman() {
+        return listPeminjaman;
+    }
+
+    public void setListPeminjaman(List<Peminjaman> listPeminjaman) {
+        this.listPeminjaman = listPeminjaman;
     }
 
     public void setIdAnggota(String idAnggota) {

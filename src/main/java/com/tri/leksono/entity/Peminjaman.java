@@ -45,4 +45,35 @@ public class Peminjaman implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date tglKembali;
 
+    public Buku getBuku() {
+        return buku;
+    }
+
+    public void setBuku(Buku buku) {
+        this.buku = buku;
+    }
+
+    public Anggota getAnggota() {
+        return anggota;
+    }
+
+    public void setAnggota(Anggota anggota) {
+        this.anggota = anggota;
+    }
+
+    public Date getTglPinjam() {
+        return tglPinjam;
+    }
+
+    public void setTglPinjam(Date tglPinjam) {
+        this.tglPinjam = tglPinjam;
+    }
+
+    public Date getTglKembali() {
+        return tglKembali;
+    }
+
+    public void setTglKembali(Date tglKembali) {
+        this.tglKembali = tglKembali;
+    }
 }

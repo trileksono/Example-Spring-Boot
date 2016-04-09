@@ -5,9 +5,12 @@
  */
 package com.tri.leksono.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +29,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "tbl_buku")
 public class Buku implements Serializable {
+
+    private static final Logger LOG = Logger.getLogger(Buku.class.getName());
     
     @Id                            
     @GeneratedValue(generator = "uuid")
@@ -48,8 +53,17 @@ public class Buku implements Serializable {
     @Size(min = 4, max = 4)
     private String tahunTerbit;
     
-    @OneToMany(mappedBy = "buku")
+    @OneToMany(mappedBy = "buku", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Peminjaman> listPeminjaman = new ArrayList<>();
+    
+    public List<Peminjaman> getListPeminjaman() {
+        return listPeminjaman;
+    }
+
+    public void setListPeminjaman(List<Peminjaman> listPeminjaman) {
+        this.listPeminjaman = listPeminjaman;
+    }
     
     public String getIdBuku() {
         return idBuku;
