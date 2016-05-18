@@ -7,21 +7,15 @@ package com.tri.leksono.controller;
 
 import com.tri.leksono.dao.AnggotaDAO;
 import com.tri.leksono.entity.Anggota;
-import com.tri.leksono.util.ResponseUtil;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  *
@@ -48,38 +42,32 @@ public class RAnggotaController {
 
     @RequestMapping(value = "/anggota/nama/{nama}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity cariByName(@PathVariable("nama") String nama) {
-        List lAnggota = dao.findByNama(nama);
-        if (lAnggota.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(lAnggota, HttpStatus.OK);
+    public ResponseEntity<List<Anggota>> cariByName(@PathVariable("nama") String nama) {
+        List<Anggota> lAnggota = dao.findByNama(nama);
+        if (lAnggota.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(lAnggota, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/anggota/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity findById(@PathVariable("id") String id) {
         Anggota anggota = dao.findOne(id);
-        if (anggota == null) {
-            return new ResponseEntity<>(ResponseUtil.tidakAda(), HttpStatus.NOT_FOUND);
-        }
+        if (anggota == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(anggota, HttpStatus.OK);
     }
 
     //Custom response
     @RequestMapping(value = "/anggota/id/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody ResponseUtil findByIdCus(@PathVariable("id") String id) {
-        ResponseUtil resp = new ResponseUtil();
+    public @ResponseBody
+    ResponseEntity<Anggota> findByIdCus(@PathVariable("id") String id) {
         Anggota anggota = dao.findOne(id);
         if (anggota == null) {
-            return ResponseUtil.tidakAda();
-        } else {
-            resp.setErrorCode("00");
-            resp.setErrorMessage("success");
-            resp.setObject(anggota);
-            return resp;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(anggota, HttpStatus.OK);
         }
+
     }
     //
     

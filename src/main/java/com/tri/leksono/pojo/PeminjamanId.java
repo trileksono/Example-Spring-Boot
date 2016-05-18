@@ -33,7 +33,7 @@ public class PeminjamanId implements Serializable{
         this.anggota = anggota;
     }
 
-    @Override
+    /*@Override
     public int hashCode() {
         int hash = 7;
         hash = 61 * hash + Objects.hashCode(this.buku);
@@ -60,6 +60,6 @@ public class PeminjamanId implements Serializable{
             return false;
         }
         return true;
-    }
+    }*/
     
 }

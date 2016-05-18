@@ -6,12 +6,13 @@ import com.tri.leksono.dao.PeminjamanDao;
 import com.tri.leksono.entity.Anggota;
 import com.tri.leksono.entity.Buku;
 import com.tri.leksono.entity.Peminjaman;
-import com.tri.leksono.util.ResponseUtil;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,15 +46,13 @@ public class RPeminjamanController {
     
     @RequestMapping(value = "/pinjam", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    private @ResponseBody ResponseUtil simpanPinjam(@RequestBody Peminjaman peminjaman) throws ParseException{
-        ResponseUtil res = new ResponseUtil();
-        
+    private @ResponseBody
+    ResponseEntity simpanPinjam(@RequestBody Peminjaman peminjaman) throws ParseException{
+
         Anggota ag = anggotaDao.findOne(peminjaman.getAnggota().getIdAnggota());
         Buku buku = bukuDao.findOne(peminjaman.getBuku().getIdBuku());
         if(ag == null || buku == null){
-            res.setErrorCode("90");
-            res.setErrorMessage("Data tidak ditemukan");
-            return res;
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Peminjaman pm = new Peminjaman();
         pm.setAnggota(ag);
@@ -62,48 +61,33 @@ public class RPeminjamanController {
         pm.setTglPinjam(peminjaman.getTglPinjam());
         
         dao.save(pm);
-        res.setErrorCode("00");
-        res.setErrorMessage("Success");
-        return res;
+        return new ResponseEntity(HttpStatus.CREATED);
     }
     
     @RequestMapping(value ="/pinjam/", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    private @ResponseBody ResponseUtil cariPinjamBuku(){
-        ResponseUtil res = new ResponseUtil();
+    private @ResponseBody ResponseEntity cariPinjamBuku(){
         List<Peminjaman> p = dao.findAll();
-        if(p != null){
-            res.setErrorCode("00");
-            res.setObject(p);
-        }else{
-            res.setErrorCode("90");
-            res.setErrorMessage("Data tidak ditemukan");
+        if(p.isEmpty()){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        return res;
+        return new ResponseEntity<>(p,HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/pinjam/tgl/{tglPinjam}/{tglKembali}", method = RequestMethod.GET)
+    @RequestMapping(value = "/pinjam/{tglPinjam}&{tglKembali}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    private @ResponseBody ResponseUtil cariPinjam(
+    private @ResponseBody ResponseEntity cariPinjam(
             @PathVariable ("tglPinjam") String tglPinjam,
             @PathVariable ("tglKembali") String tglKembali){
-            ResponseUtil res = new ResponseUtil();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             List<Peminjaman> p = dao.findTglPinjam(sdf.parse(tglPinjam),sdf.parse(tglKembali));
             if(p.isEmpty()){
-                res.setErrorCode("90");
-                res.setErrorMessage("Data tidak ditemukan");
-            }else{
-                res.setErrorCode("00");
-                res.setErrorMessage("Success");
-                res.setObject(p);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return res;
+            return new ResponseEntity<>(p,HttpStatus.OK);
         } catch (ParseException ex) {
-            res.setErrorCode("50");
-            res.setErrorMessage("Error format penulisan tanggal");
-            return res;
+            return new ResponseEntity<>("Date formate exception (yyyy-MM-dd)",HttpStatus.BAD_REQUEST);
         }
     }
 }
